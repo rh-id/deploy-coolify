@@ -4,7 +4,7 @@ Dockerfile-based deployments for [Coolify](https://coolify.io).
 
 ## Moodle 5.2 (PostgreSQL)
 
-All-in-one Docker image running Moodle 5.2 with PostgreSQL 15, Apache, and PHP 8.3 in a single container. Designed for Coolify's Dockerfile deployment mode.
+All-in-one Docker image running Moodle 5.2 with PostgreSQL, Apache, and PHP 8.3 in a single container. Designed for Coolify's Dockerfile deployment mode.
 
 ### Architecture
 
@@ -12,24 +12,34 @@ All-in-one Docker image running Moodle 5.2 with PostgreSQL 15, Apache, and PHP 8
 |---|---|
 | Base image | `moodlehq/moodle-php-apache:8.3` |
 | Moodle | 5.2 (`MOODLE_502_STABLE`) |
-| Database | PostgreSQL 15 (in-container) |
+| Database | PostgreSQL 18 (in-container, configurable via build arg) |
 | Process manager | supervisord (postgres + apache + cron) |
 | Document root | `/var/www/html/public` (Moodle 5.1+ security feature) |
+
+### Build Args
+
+| Arg | Default | Description |
+|---|---|---|
+| `MOODLE_BRANCH` | `MOODLE_502_STABLE` | Moodle Git branch |
+| `PG_MAJOR` | `18` | PostgreSQL major version |
+
+To change the PostgreSQL version, set the `PG_MAJOR` build arg in Coolify's service settings (e.g. `PG_MAJOR=16`). This installs PostgreSQL from the [official PostgreSQL APT repository](https://wiki.postgresql.org/wiki/Apt).
 
 ### Coolify Setup
 
 1. Create a new **Public Repository** service in Coolify (or connect this repo)
 2. Set the **Build Pack** to **Dockerfile**
 3. Set the **Dockerfile Location** to `moodle/Dockerfile`
-4. Configure **Persistent Storage** for both paths:
+4. (Optional) Set **Build Args** — e.g. `PG_MAJOR=18` for a different PostgreSQL version
+5. Configure **Persistent Storage** for both paths:
 
 | Mount Path | Purpose |
 |---|---|
 | `/var/lib/postgresql/data` | PostgreSQL database |
 | `/var/moodledata` | Moodle file storage (uploads, cache, etc.) |
 
-5. Set the required **Environment Variables** (see below)
-6. Deploy
+6. Set the required **Environment Variables** (see below)
+7. Deploy
 
 ### Environment Variables
 

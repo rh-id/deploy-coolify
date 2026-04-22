@@ -1,12 +1,23 @@
 FROM moodlehq/moodle-php-apache:8.3
 
 ARG MOODLE_BRANCH=MOODLE_502_STABLE
-ARG PG_MAJOR=15
+ARG PG_MAJOR=18
 ENV PG_MAJOR=${PG_MAJOR}
 ENV PATH="/usr/lib/postgresql/${PG_MAJOR}/bin:${PATH}"
 
-RUN echo "postgresql-${PG_MAJOR} postgresql-${PG_MAJOR}/create_main_cluster boolean false" \
-    | debconf-set-selections \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       curl \
+       ca-certificates \
+       gnupg \
+    && install -d /usr/share/postgresql-common/pgdg \
+    && curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc \
+       --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+    && echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] \
+       http://apt.postgresql.org/pub/repos/apt $(. /etc/os-release && echo $VERSION_CODENAME)-pgdg main" \
+       > /etc/apt/sources.list.d/pgdg.list \
+    && echo "postgresql-${PG_MAJOR} postgresql-${PG_MAJOR}/create_main_cluster boolean false" \
+       | debconf-set-selections \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
        git \
