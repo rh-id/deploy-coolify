@@ -46,7 +46,7 @@ To change the PostgreSQL version, set the `PG_MAJOR` build arg in Coolify's serv
 | Variable | Required | Default | Description |
 |---|---|---|---|
 | `MOODLE_WWWROOT` | **Yes** | — | Full public URL (e.g. `https://moodle.example.com`) |
-| `MOODLE_PASSWORD` | **Yes** | — | Admin account password |
+| `MOODLE_PASSWORD` | **Yes** | — | Admin account password (no default — must be set) |
 | `MOODLE_DATABASE_NAME` | No | `moodle` | PostgreSQL database name |
 | `MOODLE_DATABASE_USER` | No | `moodle` | PostgreSQL user |
 | `MOODLE_DATABASE_PASSWORD` | No | `moodlepass` | PostgreSQL password |
@@ -55,7 +55,7 @@ To change the PostgreSQL version, set the `PG_MAJOR` build arg in Coolify's serv
 | `MOODLE_EMAIL` | No | `admin@example.com` | Moodle admin email |
 | `MOODLE_SITE_NAME` | No | `Moodle Site` | Moodle site full name |
 
-`MOODLE_WWWROOT` and `MOODLE_PASSWORD` must be set before the first deployment. The Moodle CLI installer runs automatically on first boot when `config.php` does not exist.
+> **Note:** The Moodle CLI installer will **silently skip** if `MOODLE_WWWROOT` or `MOODLE_PASSWORD` is not set. Make sure both are configured in Coolify's environment variables before the first deployment. The installer only runs once — when `config.php` does not exist.
 
 ### How It Works
 

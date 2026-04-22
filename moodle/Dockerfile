@@ -31,13 +31,11 @@ RUN apt-get update \
 RUN git clone --depth 1 --branch ${MOODLE_BRANCH} \
     https://github.com/moodle/moodle.git /var/www/html
 
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+
 RUN mkdir -p /var/moodledata /var/run/postgresql /var/log/supervisor \
     && chown -R www-data:www-data /var/moodledata \
-    && chown postgres:postgres /var/run/postgresql \
-    && if [ -d /var/www/html/public ]; then \
-         sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' \
-           /etc/apache2/sites-available/000-default.conf; \
-       fi
+    && chown postgres:postgres /var/run/postgresql
 
 COPY php-production.ini /usr/local/etc/php/conf.d/zz-production.ini
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
