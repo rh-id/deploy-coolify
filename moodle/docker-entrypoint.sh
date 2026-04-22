@@ -58,9 +58,9 @@ if [ ! -f /var/www/html/config.php ] && [ -n "${MOODLE_WWWROOT}" ] && [ -n "${MO
     echo "[init] Moodle installed."
 fi
 
-if [ -f /var/www/html/config.php ] && ! grep -q 'reverseproxy' /var/www/html/config.php; then
-    echo "\$CFG->reverseproxy = true;" >> /var/www/html/config.php
-    echo "[init] Added reverse proxy support to config.php."
+if [ -f /var/www/html/config.php ] && ! grep -q 'sslproxy' /var/www/html/config.php; then
+    sed -i '/require_once.*lib\/setup\.php/i $CFG->sslproxy = true;' /var/www/html/config.php
+    echo "[init] Added SSL proxy support to config.php."
 fi
 
 su postgres -c "pg_ctl -D /var/lib/postgresql/data -w stop" 2>/dev/null || true
