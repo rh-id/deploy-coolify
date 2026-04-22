@@ -58,6 +58,11 @@ if [ ! -f /var/www/html/config.php ] && [ -n "${MOODLE_WWWROOT}" ] && [ -n "${MO
     echo "[init] Moodle installed."
 fi
 
+if [ -f /var/www/html/config.php ] && ! grep -q 'reverseproxy' /var/www/html/config.php; then
+    echo "\$CFG->reverseproxy = true;" >> /var/www/html/config.php
+    echo "[init] Added reverse proxy support to config.php."
+fi
+
 su postgres -c "pg_ctl -D /var/lib/postgresql/data -w stop" 2>/dev/null || true
 
 echo "* * * * * www-data php /var/www/html/admin/cli/cron.php > /dev/null 2>&1" \
