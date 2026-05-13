@@ -28,8 +28,9 @@ Standalone PostgreSQL 18.3 via Docker Compose. Designed for Coolify's Docker Com
 | Variable | Required | Default | Description |
 |---|---|---|---|
 | `POSTGRES_PASSWORD` | **Yes** | — | PostgreSQL superuser password |
-| `POSTGRES_DB` | No | `app` | Database created on first init |
 | `POSTGRES_USER` | No | `postgres` | PostgreSQL superuser name |
+
+> **Note:** Optionally set `POSTGRES_DB` to create an additional database on first init. By default, only the `postgres` database is created.
 
 ## Data Persistence
 
